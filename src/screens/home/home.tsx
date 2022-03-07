@@ -1,21 +1,30 @@
-import { View, Text, Button } from "react-native";
+import { View, ScrollView, Image } from "react-native";
 import React, { ReactElement } from "react";
 import styles from "./home.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
+import { GradientBackground, Button } from "@components";
 type HomeProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "Home">;
 };
 export default function Home({ navigation }: HomeProps): ReactElement {
     return (
-        <View style={styles.container}>
-            <Text>home</Text>
-            <Button
-                title="Game"
-                onPress={() => {
-                    navigation.navigate("Game", { gameId: "3" });
-                }}
-            />
-        </View>
+        <GradientBackground>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image source={require("@assets/logo.png")} style={styles.logo} />
+                <View style={styles.buttons}>
+                    <Button
+                        onPress={() => {
+                            navigation.navigate("SinglePlayerGame");
+                        }}
+                        style={styles.button}
+                        title={"Single Player"}
+                    />
+                    <Button style={styles.button} title={"Multiplayer"} />
+                    <Button style={styles.button} title={"Login"} />
+                    <Button style={styles.button} title={"Settings"} />
+                </View>
+            </ScrollView>
+        </GradientBackground>
     );
 }
