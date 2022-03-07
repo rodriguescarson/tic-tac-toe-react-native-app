@@ -3,7 +3,6 @@ import React, { ReactElement } from "react";
 import Text from "../text/text";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { BoardState, BoardResult } from "@utils";
-import Boardline from "./board-line";
 import BoardLine from "./board-line";
 type BoardProps = {
     state: BoardState;

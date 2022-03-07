@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native";
-import React, { ReactElement, useEffect, useState, useRef } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import styles from "./single-player-game.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";

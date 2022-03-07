@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { StyleSheet, Animated } from "react-native";
 import React, { ReactElement, useEffect, useRef } from "react";
 import { BoardResult } from "@utils";
 
