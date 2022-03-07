@@ -96,6 +96,7 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
                     }}
                     state={state}
                     size={300}
+                    gameResult={gameResult}
                 />
             </SafeAreaView>
         </GradientBackground>
