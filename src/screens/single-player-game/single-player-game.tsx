@@ -4,9 +4,7 @@ import styles from "./single-player-game.styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { GradientBackground, Board } from "@components";
-import { BoardState, isEmpty, isTerminal, getBestMove } from "@utils";
-import { Audio } from "expo-av";
-import * as Haptics from "expo-haptics";
+import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
 
 type SinglePlayerGameProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "Home">;
@@ -21,8 +19,8 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
     const [turn, setTurn] = useState<"HUMAN" | "BOT">(Math.random() < 0.5 ? "HUMAN" : "BOT");
     const [isHumanMaximizing, setIsHumanMaximizing] = useState<boolean>(true);
     const gameResult = isTerminal(state);
-    const popSoundRef = useRef<Audio.Sound | null>(null);
-    const pop2SoundRef = useRef<Audio.Sound | null>(null);
+    const playSound = useSounds();
+
     // //prettier-ignore
     // const b: BoardState = ["o", "o", "o", "o", "o", null, "x", "x", "o"];
 
@@ -39,18 +37,39 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
         stateCopy[cell] = symbol;
         setState(stateCopy);
         try {
-            symbol === "x"
-                ? popSoundRef.current?.replayAsync()
-                : pop2SoundRef.current?.replayAsync();
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            symbol === "x" ? playSound("pop1") : playSound("pop2");
         } catch (e) {
             console.log(e);
         }
     };
+
+    const getWinner = (winnerSymbol: Cell): "HUMAN" | "BOT" | "DRAW" => {
+        if (winnerSymbol === "x") {
+            return isHumanMaximizing ? "HUMAN" : "BOT";
+        }
+        if (winnerSymbol === "o") {
+            return isHumanMaximizing ? "HUMAN" : "BOT";
+        }
+        return "DRAW";
+    };
+
     useEffect(() => {
         if (gameResult) {
             //hanlde game finished
-            alert("Game over");
+            const winner = getWinner(gameResult.winner);
+            if (winner === "HUMAN") {
+                playSound("win");
+                alert("You Won");
+            }
+            if (winner === "BOT") {
+                playSound("loss");
+
+                alert("You Lost!");
+            }
+            if (winner === "DRAW") {
+                playSound("draw");
+                alert("It is a Draw!");
+            }
         }
         if (turn === "BOT") {
             if (isEmpty(state)) {
@@ -67,25 +86,6 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
             }
         }
     }, [state, turn]);
-
-    useEffect(() => {
-        // load sounds
-        const popSoundObject = new Audio.Sound();
-        const pop2SoundObject = new Audio.Sound();
-        const loadSounds = async () => {
-            /* eslint-disable @typescript-eslint/no-var-requires */
-            await popSoundObject.loadAsync(require("@assets/pop_1.wav"));
-            popSoundRef.current = popSoundObject;
-            await pop2SoundObject.loadAsync(require("@assets/pop_2.wav"));
-            pop2SoundRef.current = pop2SoundObject;
-        };
-        loadSounds();
-        return () => {
-            //unload sounds
-            popSoundObject && popSoundObject.unloadAsync();
-            pop2SoundObject && pop2SoundObject.unloadAsync();
-        };
-    }, []);
     return (
         <GradientBackground>
             <SafeAreaView style={styles.container}>
