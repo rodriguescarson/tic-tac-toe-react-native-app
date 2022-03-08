@@ -1,22 +1,20 @@
 import React, { ReactElement, useEffect, useRef } from "react";
 import { View, StyleSheet, Animated } from "react-native";
-import { BoardResult } from "@utils";
+import { BoardResult, colors } from "@utils";
 
 const style = StyleSheet.create({
     line: {
         position: "absolute",
-        backgroundColor: "#f03"
+        backgroundColor: colors.lightPurple
     },
     vline: {
-        width: 2
+        width: 4
     },
-
     hline: {
-        height: 2
+        height: 4
     },
     dline: {
-        width: 2,
-        height: "100%",
+        width: 4,
         top: 0,
         left: "50%"
     }
@@ -84,13 +82,13 @@ export default function BoardLine({ size, gameResult }: BoardLineProps): ReactEl
                                 outputRange: [0, diagonalHeight]
                             }),
                             transform: [
-                                { rotateZ: gameResult.diagonal === "MAIN" ? "-45deg" : "45deg" },
                                 {
                                     translateY: animationRef.current.interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [size / 2, -(diagonalHeight - size) / 2]
                                     })
-                                }
+                                },
+                                { rotateZ: gameResult.diagonal === "MAIN" ? "-45deg" : "45deg" }
                             ]
                         }
                     ]}
