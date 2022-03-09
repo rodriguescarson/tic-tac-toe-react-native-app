@@ -1,16 +1,17 @@
 import { SafeAreaView, Dimensions, View } from "react-native";
 import React, { ReactElement, useEffect, useState } from "react";
 import styles from "./single-player-game.styles";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { StackNavigatorParams } from "@config/navigator";
+// import { StackNavigationProp } from "@react-navigation/stack";
+// import { StackNavigatorParams } from "@config/navigator";
 import { GradientBackground, Board, Text, Button } from "@components";
 import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
 import { useSettings, difficulties } from "@contexts/settings-context";
 const SCREEN_WIDTH = Dimensions.get("screen").width;
-type SinglePlayerGameProps = {
-    navigation: StackNavigationProp<StackNavigatorParams, "Home">;
-};
-export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps): ReactElement {
+// type SinglePlayerGameProps = {
+//     navigation: StackNavigationProp<StackNavigatorParams, "Home">;
+// };
+// { navigation }: SinglePlayerGameProps
+export default function SinglePlayerGame(): ReactElement {
     //prettier-ignore
     const [state, setState] = useState<BoardState>([
         null,null,null,
@@ -45,7 +46,7 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
         try {
             symbol === "x" ? playSound("pop1") : playSound("pop2");
         } catch (e) {
-            console.log(e);
+            alert(e);
         }
     };
 

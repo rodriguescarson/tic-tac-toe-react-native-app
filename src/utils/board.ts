@@ -10,7 +10,6 @@ export const printFormattedBoard = (state: BoardState): void => {
                 formattedString += "\n\u2015\u2015\u2015 \u2015\u2015\u2015 \u2015\u2015\u2015\n";
         }
     });
-    console.log(formattedString);
 };
 
 export const isEmpty = (state: BoardState): boolean => {

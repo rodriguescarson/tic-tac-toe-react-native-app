@@ -46,7 +46,7 @@ export default function useSounds(): (sound: SoundType) => void {
                 }
             }
         } catch (e) {
-            console.log(e);
+            alert(e);
         }
     };
 
