@@ -5,7 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { GradientBackground, Board, Text, Button } from "@components";
 import { BoardState, isEmpty, isTerminal, getBestMove, Cell, useSounds } from "@utils";
-
+import { useSettings, difficulties } from "@contexts/settings-context";
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 type SinglePlayerGameProps = {
     navigation: StackNavigationProp<StackNavigatorParams, "Home">;
@@ -21,7 +21,7 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
     const [isHumanMaximizing, setIsHumanMaximizing] = useState<boolean>(true);
     const gameResult = isTerminal(state);
     const playSound = useSounds();
-
+    const { settings } = useSettings();
     const [gameCount, setGameCount] = useState({
         wins: 0,
         losses: 0,
@@ -85,7 +85,12 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
                 setIsHumanMaximizing(false);
                 setTurn("HUMAN");
             } else {
-                const best = getBestMove(state, !isHumanMaximizing, 0, -1);
+                const best = getBestMove(
+                    state,
+                    !isHumanMaximizing,
+                    0,
+                    parseInt(settings ? settings?.difficulty : "-1")
+                );
                 insertCell(best, isHumanMaximizing ? "o" : "x");
                 setTurn("HUMAN");
             }
@@ -100,7 +105,9 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
         <GradientBackground>
             <SafeAreaView style={styles.container}>
                 <View>
-                    <Text style={styles.difficulty}>Difficulty Hard</Text>
+                    <Text style={styles.difficulty}>
+                        Difficulty:{settings ? difficulties[settings.difficulty] : "Impossible"}
+                    </Text>
                     <View style={styles.results}>
                         <View style={styles.resultsBox}>
                             <Text style={styles.resultsTitle}>Wins</Text>

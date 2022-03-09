@@ -1,16 +1,13 @@
 import { View, ScrollView, TouchableOpacity, Switch } from "react-native";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { GradientBackground, Text } from "@components";
 import styles from "./settings.styles";
 import { colors } from "@utils";
-export default function Settings(): ReactElement {
-    const [state, setState] = useState(false);
-    const difficulties = {
-        "1": "Beginner",
-        "3": "Intermediate",
-        "4": "Hard",
-        "-1": "Impossible"
-    };
+import { difficulties, useSettings } from "@contexts/settings-context";
+export default function Settings(): ReactElement | null {
+    const { settings, saveSetting } = useSettings();
+    if (!settings) return null;
+
     return (
         <GradientBackground>
             <ScrollView contentContainerStyle={styles.container}>
@@ -19,8 +16,35 @@ export default function Settings(): ReactElement {
                     <View style={styles.choices}>
                         {Object.keys(difficulties).map(level => {
                             return (
-                                <TouchableOpacity style={styles.choice} key={level}>
-                                    <Text style={styles.choiceText}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        saveSetting(
+                                            "difficulty",
+                                            level as keyof typeof difficulties
+                                        );
+                                    }}
+                                    style={[
+                                        styles.choice,
+                                        {
+                                            backgroundColor:
+                                                settings.difficulty === level
+                                                    ? colors.lightPurple
+                                                    : colors.lightGreen
+                                        }
+                                    ]}
+                                    key={level}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.choiceText,
+                                            {
+                                                color:
+                                                    settings.difficulty === level
+                                                        ? colors.lightGreen
+                                                        : colors.darkPurple
+                                            }
+                                        ]}
+                                    >
                                         {difficulties[level as keyof typeof difficulties]}
                                     </Text>
                                 </TouchableOpacity>
@@ -37,9 +61,9 @@ export default function Settings(): ReactElement {
                         }}
                         thumbColor={colors.lightGreen}
                         ios_backgroundColor={colors.purple}
-                        value={state}
+                        value={settings.sounds}
                         onValueChange={() => {
-                            setState(!state);
+                            saveSetting("sounds", !settings.sounds);
                         }}
                     />
                 </View>
@@ -52,9 +76,9 @@ export default function Settings(): ReactElement {
                         }}
                         thumbColor={colors.lightGreen}
                         ios_backgroundColor={colors.purple}
-                        value={state}
+                        value={settings.haptics}
                         onValueChange={() => {
-                            setState(!state);
+                            saveSetting("haptics", !settings.haptics);
                         }}
                     />
                 </View>
