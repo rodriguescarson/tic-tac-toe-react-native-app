@@ -54,7 +54,7 @@ export default function SinglePlayerGame({ navigation }: SinglePlayerGameProps):
             return isHumanMaximizing ? "HUMAN" : "BOT";
         }
         if (winnerSymbol === "o") {
-            return isHumanMaximizing ? "HUMAN" : "BOT";
+            return isHumanMaximizing ? "BOT" : "HUMAN";
         }
         return "DRAW";
     };

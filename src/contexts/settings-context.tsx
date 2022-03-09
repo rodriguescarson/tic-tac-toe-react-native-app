@@ -42,8 +42,6 @@ type SettingsContextType = {
 
 function SettingsProvider(props: { children: ReactNode }): ReactElement {
     const [settings, setSettings] = useState<SettingsType | null>(null);
-    const context = useSettings();
-    console.log(context);
 
     const saveSetting = async <T extends keyof SettingsType>(
         setting: T,
